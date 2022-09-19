@@ -1,0 +1,357 @@
+Index: src/main/java/com/keep/calm/java/model/Student.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.keep.calm.java.model;\r\n\r\npublic class Student {\r\n    private int id;\r\n    private String name;\r\n    private String family;\r\n\r\n    public int getId() {\r\n        return id;\r\n    }\r\n\r\n    public void setId(int id) {\r\n        this.id = id;\r\n    }\r\n\r\n    public String getName() {\r\n        return name;\r\n    }\r\n\r\n    public void setName(String name) {\r\n        this.name = name;\r\n    }\r\n\r\n    public String getFamily() {\r\n        return family;\r\n    }\r\n\r\n    public void setFamily(String family) {\r\n        this.family = family;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/keep/calm/java/model/Student.java b/src/main/java/com/keep/calm/java/model/Student.java
+--- a/src/main/java/com/keep/calm/java/model/Student.java	(revision e863c572a8db493f0d2abb50bbd7527fe9bb4b49)
++++ b/src/main/java/com/keep/calm/java/model/Student.java	(date 1663612906811)
+@@ -1,18 +1,37 @@
+ package com.keep.calm.java.model;
+ 
+ public class Student {
+-    private int id;
++    private long id;
+     private String name;
+     private String family;
+ 
+-    public int getId() {
++    public Student(long id, String name, String family) {
++        this.id = id;
++        this.name = name;
++        this.family = family;
++    }
++
++    public long getId() {
+         return id;
+     }
+ 
++    public void setId(long id) {
++        this.id = id;
++    }
++
+     public void setId(int id) {
+         this.id = id;
+     }
+ 
++    @Override
++    public String toString() {
++        return "Student{" +
++                "id=" + id +
++                ", name='" + name + '\'' +
++                ", family='" + family + '\'' +
++                '}';
++    }
++
+     public String getName() {
+         return name;
+     }
+Index: src/main/java/com/keep/calm/java/StudentApplication.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.keep.calm.java;public class StudentApplication {\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/keep/calm/java/StudentApplication.java b/src/main/java/com/keep/calm/java/StudentApplication.java
+--- a/src/main/java/com/keep/calm/java/StudentApplication.java	(revision e863c572a8db493f0d2abb50bbd7527fe9bb4b49)
++++ b/src/main/java/com/keep/calm/java/StudentApplication.java	(date 1663613230296)
+@@ -1,2 +1,18 @@
+-package com.keep.calm.java;public class StudentApplication {
++package com.keep.calm.java;
++
++import com.keep.calm.java.controller.StudentController;
++import com.keep.calm.java.model.Student;
++import com.keep.calm.java.repository.StudentRepository;
++import com.keep.calm.java.service.StudentService;
++import java.util.List;
++
++public class StudentApplication {
++    public static void main(String[] args) {
++        StudentRepository studentRepository = new StudentRepository();
++        StudentService studentService= new StudentService(studentRepository);
++                StudentController studentController = new StudentController(studentService);
++        List<Student> students= studentController.getAllStudent();
++        System.out.println(students);
++    }
++
+ }
+Index: src/main/java/com/keep/calm/java/repository/StudentRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/keep/calm/java/repository/StudentRepository.java b/src/main/java/com/keep/calm/java/repository/StudentRepository.java
+new file mode 100644
+--- /dev/null	(date 1663606718844)
++++ b/src/main/java/com/keep/calm/java/repository/StudentRepository.java	(date 1663606718844)
+@@ -0,0 +1,20 @@
++package com.keep.calm.java.repository;
++
++import com.keep.calm.java.model.Student;
++
++import java.util.ArrayList;
++import java.util.List;
++
++public class StudentRepository implements StudentRepositoryIX {
++
++    @Override
++    public List<Student> findAll() {
++        Student student1 = new Student(100, "simin", "bigdeli");
++        Student student2 = new Student(200, "yasamin", "fadaei");
++        ArrayList<Student> studentArrayList = new ArrayList<>();
++        studentArrayList.add(student1);
++        studentArrayList.add(student2);
++        return studentArrayList;
++
++    }
++}
+Index: src/main/java/com/keep/calm/java/controller/StudentController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/keep/calm/java/controller/StudentController.java b/src/main/java/com/keep/calm/java/controller/StudentController.java
+new file mode 100644
+--- /dev/null	(date 1663613284829)
++++ b/src/main/java/com/keep/calm/java/controller/StudentController.java	(date 1663613284829)
+@@ -0,0 +1,18 @@
++package com.keep.calm.java.controller;
++
++import com.keep.calm.java.model.Student;
++import com.keep.calm.java.service.StudentServiceIX;
++
++import java.util.List;
++
++public class StudentController {
++    public StudentController(StudentServiceIX studentService) {
++        this.studentService = studentService;
++    }
++
++    private StudentServiceIX studentService;
++    public List<Student> getAllStudent(){
++        return studentService.getAllStudent();
++
++    }
++}
+Index: src/main/java/com/keep/calm/java/repository/StudentRepositoryIX.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/keep/calm/java/repository/StudentRepositoryIX.java b/src/main/java/com/keep/calm/java/repository/StudentRepositoryIX.java
+new file mode 100644
+--- /dev/null	(date 1663606718857)
++++ b/src/main/java/com/keep/calm/java/repository/StudentRepositoryIX.java	(date 1663606718857)
+@@ -0,0 +1,9 @@
++package com.keep.calm.java.repository;
++
++import com.keep.calm.java.model.Student;
++
++import java.util.List;
++
++public interface StudentRepositoryIX {
++    List<Student> findAll();
++}
+Index: pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\"\r\n         xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\r\n         xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\r\n    <modelVersion>4.0.0</modelVersion>\r\n\r\n    <groupId>org.example</groupId>\r\n    <artifactId>student-spring</artifactId>\r\n    <version>1.0-SNAPSHOT</version>\r\n\r\n    <properties>\r\n        <maven.compiler.source>17</maven.compiler.source>\r\n        <maven.compiler.target>17</maven.compiler.target>\r\n    </properties>\r\n    \r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pom.xml b/pom.xml
+--- a/pom.xml	(revision e863c572a8db493f0d2abb50bbd7527fe9bb4b49)
++++ b/pom.xml	(date 1662517060938)
+@@ -12,5 +12,14 @@
+         <maven.compiler.source>17</maven.compiler.source>
+         <maven.compiler.target>17</maven.compiler.target>
+     </properties>
+-    
++    <dependencies>
++        <!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
++        <dependency>
++            <groupId>org.springframework</groupId>
++            <artifactId>spring-context</artifactId>
++            <version>5.3.22</version>
++        </dependency>
++
++    </dependencies>
++
+ </project>
+\ No newline at end of file
+Index: src/main/java/com/keep/calm/java/service/StudentService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/keep/calm/java/service/StudentService.java b/src/main/java/com/keep/calm/java/service/StudentService.java
+new file mode 100644
+--- /dev/null	(date 1663612667985)
++++ b/src/main/java/com/keep/calm/java/service/StudentService.java	(date 1663612667985)
+@@ -0,0 +1,19 @@
++package com.keep.calm.java.service;
++
++import com.keep.calm.java.model.Student;
++import com.keep.calm.java.repository.StudentRepositoryIX;
++
++import java.util.List;
++
++public class StudentService implements StudentServiceIX {
++    public StudentService(StudentRepositoryIX studentRepository) {
++        this.studentRepository = studentRepository;
++    }
++
++    private StudentRepositoryIX studentRepository;
++
++    @Override
++    public List<Student> getAllStudent() {
++        return studentRepository.findAll();
++    }
++}
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"262ce046-cfef-44a0-9a81-ace8ddda76c4\" name=\"Changes\" comment=\"\" />\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"2EQ93IrpUwYXz3PXndTVVJjzsZn\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n    <option name=\"showMembers\" value=\"true\" />\r\n    <option name=\"showVisibilityIcons\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"RunOnceActivity.OpenProjectViewOnStart\": \"true\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\"\r\n  }\r\n}]]></component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"262ce046-cfef-44a0-9a81-ace8ddda76c4\" name=\"Changes\" comment=\"\" />\r\n      <created>1662516740566</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1662516740566</updated>\r\n    </task>\r\n    <servers />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision e863c572a8db493f0d2abb50bbd7527fe9bb4b49)
++++ b/.idea/workspace.xml	(date 1663613033134)
+@@ -1,17 +1,44 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
++  <component name="AutoImportSettings">
++    <option name="autoReloadType" value="SELECTIVE" />
++  </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="262ce046-cfef-44a0-9a81-ace8ddda76c4" name="Changes" comment="" />
++    <list default="true" id="262ce046-cfef-44a0-9a81-ace8ddda76c4" name="Changes" comment="without spring(no dependency)">
++      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/keep/calm/java/controller/StudentController.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/keep/calm/java/repository/StudentRepository.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/keep/calm/java/repository/StudentRepositoryIX.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/keep/calm/java/service/StudentService.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/keep/calm/java/service/StudentServiceIX.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/keep/calm/java/StudentApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/keep/calm/java/StudentApplication.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/keep/calm/java/model/Student.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/keep/calm/java/model/Student.java" afterDir="false" />
++    </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+     <option name="LAST_RESOLUTION" value="IGNORE" />
++  </component>
++  <component name="FileTemplateManagerImpl">
++    <option name="RECENT_TEMPLATES">
++      <list>
++        <option value="Class" />
++        <option value="Interface" />
++      </list>
++    </option>
+   </component>
+   <component name="Git.Settings">
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
++  </component>
++  <component name="MarkdownSettingsMigration">
++    <option name="stateVersion" value="1" />
+   </component>
+   <component name="ProjectId" id="2EQ93IrpUwYXz3PXndTVVJjzsZn" />
+-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
++  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
++    <ConfirmationsSetting value="2" id="Add" />
++  </component>
+   <component name="ProjectViewState">
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+@@ -21,9 +48,43 @@
+   <component name="PropertiesComponent"><![CDATA[{
+   "keyToString": {
+     "RunOnceActivity.OpenProjectViewOnStart": "true",
+-    "RunOnceActivity.ShowReadmeOnStart": "true"
++    "RunOnceActivity.ShowReadmeOnStart": "true",
++    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
++    "last_opened_file_path": "C:/Users/yaser/IdeaProjects/student-spring",
++    "project.structure.last.edited": "Modules",
++    "project.structure.proportion": "0.15",
++    "project.structure.side.proportion": "0.2"
+   }
+ }]]></component>
++  <component name="RecentsManager">
++    <key name="CreateClassDialog.RecentsKey">
++      <recent name="com.keep.calm.java.repository" />
++    </key>
++    <key name="ExtractSuperBase.RECENT_KEYS">
++      <recent name="com.keep.calm.java.service" />
++      <recent name="com.keep.calm.java.repository" />
++    </key>
++  </component>
++  <component name="RunManager">
++    <configuration name="StudentApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
++      <option name="MAIN_CLASS_NAME" value="com.keep.calm.java.StudentApplication" />
++      <module name="student-spring" />
++      <extension name="coverage">
++        <pattern>
++          <option name="PATTERN" value="com.keep.calm.java.*" />
++          <option name="ENABLED" value="true" />
++        </pattern>
++      </extension>
++      <method v="2">
++        <option name="Make" enabled="true" />
++      </method>
++    </configuration>
++    <recent_temporary>
++      <list>
++        <item itemvalue="Application.StudentApplication" />
++      </list>
++    </recent_temporary>
++  </component>
+   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+   <component name="TaskManager">
+     <task active="true" id="Default" summary="Default task">
+@@ -35,4 +96,19 @@
+     </task>
+     <servers />
+   </component>
++  <component name="Vcs.Log.Tabs.Properties">
++    <option name="TAB_STATES">
++      <map>
++        <entry key="MAIN">
++          <value>
++            <State />
++          </value>
++        </entry>
++      </map>
++    </option>
++  </component>
++  <component name="VcsManagerConfiguration">
++    <MESSAGE value="without spring(no dependency)" />
++    <option name="LAST_COMMIT_MESSAGE" value="without spring(no dependency)" />
++  </component>
+ </project>
+\ No newline at end of file
+Index: src/main/java/com/keep/calm/java/service/StudentServiceIX.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/keep/calm/java/service/StudentServiceIX.java b/src/main/java/com/keep/calm/java/service/StudentServiceIX.java
+new file mode 100644
+--- /dev/null	(date 1663607205572)
++++ b/src/main/java/com/keep/calm/java/service/StudentServiceIX.java	(date 1663607205572)
+@@ -0,0 +1,9 @@
++package com.keep.calm.java.service;
++
++import com.keep.calm.java.model.Student;
++
++import java.util.List;
++
++public interface StudentServiceIX {
++    List<Student> getAllStudent();
++}
+diff --git a/.idea/sonarlint/issuestore/index.pb b/.idea/sonarlint/issuestore/index.pb
+new file mode 100644
